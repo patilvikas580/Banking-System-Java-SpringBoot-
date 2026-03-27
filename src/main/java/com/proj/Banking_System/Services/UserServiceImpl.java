@@ -18,6 +18,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     EmailService emailService;
 
+
+    @Autowired
+    TransactionService transactionService;
     @Override
     public BankResponse createAccount(UserRequest userRequest) {
         if (userRepository.existsByEmail(userRequest.getEmail())) {
@@ -78,6 +81,11 @@ public class UserServiceImpl implements UserService {
         if (userToCredit!=null){
             userToCredit.setAcount_balance(userToCredit.getAcount_balance().add(request.getAmount()));
             userRepository.save(userToCredit);
+            TransactionDto transactionDto=TransactionDto.builder().accountNumber(userToCredit.getAccountNumber())
+                    .transactionType("CREDIT")
+                    .amount(request.getAmount())
+                    .build();
+            transactionService.saveTransaction(transactionDto);
             return BankResponse.builder().responseCode(AccountUtils.ACCOUNT_CREDIT_Code).responseMessage(AccountUtils.ACCOUNT_CREDIT_Message).accountInfo(AccountInfo.builder()
                     .accountName(userToCredit.getFirstName()+" "+userToCredit.getOtherName()+" "+userToCredit.getLastName()).accountNumber(userToCredit.getAccountNumber()).accountBalance(userToCredit.getAcount_balance()).build()).build();
         }
@@ -92,6 +100,11 @@ public class UserServiceImpl implements UserService {
             if(userToDebit.getAcount_balance().subtract(request.getAmount()).compareTo(BigDecimal.ZERO)>=0){
                 userToDebit.setAcount_balance(userToDebit.getAcount_balance().subtract(request.getAmount()));
                 userRepository.save(userToDebit);
+                TransactionDto transactionDto=TransactionDto.builder().accountNumber(userToDebit.getAccountNumber())
+                        .transactionType("CREDIT")
+                        .amount(request.getAmount())
+                        .build();
+                transactionService.saveTransaction(transactionDto);
                 return BankResponse.builder().responseCode(AccountUtils.ACCOUNT_DEBIT_Code).responseMessage(AccountUtils.ACCOUNT_DEBIT_Message).accountInfo(AccountInfo.builder()
                         .accountName(userToDebit.getFirstName()+" "+userToDebit.getOtherName()+" "+userToDebit.getLastName()).accountNumber(userToDebit.getAccountNumber()).accountBalance(userToDebit.getAcount_balance()).build()).build();
             }else {
@@ -122,7 +135,18 @@ public class UserServiceImpl implements UserService {
                   "\nYour current balance is :"+sourceUser.getAcount_balance()+"\nTransfered to: "+destinationUser.getFirstName()+" "+destinationUser.getOtherName()+" "+destinationUser.getLastName()+"\n"+"Account Number :"+destinationUser.getAccountNumber()).build();
           EmailDetails creditAlert=EmailDetails.builder().subject("Account Credited").recipient(destinationUser.getEmail()).messageBody("Your Account has been credited for Rs."+request.getAmount()+"\n" +"Account Number :"+destinationUser.getAccountNumber()+"\n"+"Current Balance :"+destinationUser.getAcount_balance()).build();
           emailService.sendEmailAlert(debitAlert);
+            TransactionDto transactionDto=TransactionDto.builder().accountNumber(sourceUser.getAccountNumber())
+                    .transactionType("DEBIT")
+                    .amount(request.getAmount())
+                    .build();
+                    transactionService.saveTransaction(transactionDto);
           emailService.sendEmailAlert(creditAlert);
+            TransactionDto transactionDto1=TransactionDto.builder().accountNumber(destinationUser.getAccountNumber())
+                    .transactionType("CREDIT")
+                    .amount(request.getAmount())
+                    .build();
+            transactionService.saveTransaction(transactionDto1);
+
           return BankResponse.builder().responseMessage("Transfer Successful|| Your current Balance is "+sourceUser.getAcount_balance()).build();
         }
         return BankResponse.builder().responseCode("007").responseMessage("Insufficient Account Balance "+"Required Defficiet Amount :"+(request.getAmount().subtract(sourceUser.getAcount_balance())))
