@@ -5,6 +5,7 @@ import com.proj.Banking_System.Entity.User;
 import com.proj.Banking_System.Repository.UserRepository;
 import com.proj.Banking_System.Utils.AccountUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -21,6 +22,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     TransactionService transactionService;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @Override
     public BankResponse createAccount(UserRequest userRequest) {
         if (userRepository.existsByEmail(userRequest.getEmail())) {
@@ -36,6 +41,7 @@ public class UserServiceImpl implements UserService {
                 .stateofOrigin(userRequest.getStateofOrigin()).
                 accountNumber(AccountUtils.generateAccountNumber())
                 .Acount_balance(BigDecimal.ZERO).email(userRequest.getEmail())
+                .password(passwordEncoder.encode(userRequest.getPassword()))
                 .phoneNumber(userRequest.getPhoneNumber())
                 .alternativePhoneNumber(userRequest.getAlternativePhoneNumber()).status("ACTIVE")
                 .build();
@@ -154,6 +160,7 @@ public class UserServiceImpl implements UserService {
                         .accountName(sourceUser.getFirstName()+" "+sourceUser.getOtherName()+" "+sourceUser.getLastName()).accountNumber(sourceUser.getAccountNumber()).accountBalance(sourceUser.getAcount_balance()).build()).build();
 
     }
+
 
 
 }
