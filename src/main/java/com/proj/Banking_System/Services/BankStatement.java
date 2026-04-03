@@ -13,13 +13,11 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -57,23 +55,20 @@ public class BankStatement  {
         bankName.setBackgroundColor(BaseColor.GREEN);
         bankName.setPadding(10);
 
-//        PdfPCell bankAddress = new PdfPCell(new Phrase("Dhule Maharashtra 0001"));
-//        bankAddress.setBorder(0);
-//        bankAddress.setPaddingLeft(10);
+
 
         PdfPCell statementCell = new PdfPCell(new Phrase("Transactions Statement"));
 
         bankInfoTable.addCell(bankName);
-//        bankInfoTable.addCell(bankAddress);
         bankInfoTable.addCell(statementCell);
 
-        // --- Customer Info Section (Fixed the red circled area here) ---
+
         PdfPTable statementInfo = new PdfPTable(2);
         statementInfo.setWidthPercentage(100);
         statementInfo.setSpacingBefore(10f);
         statementInfo.setSpacingAfter(10f);
 
-        PdfPCell emptyCell = new PdfPCell(new Phrase("")); // Placeholder for alignment
+        PdfPCell emptyCell = new PdfPCell(new Phrase(""));
 
         // Row 1
         PdfPCell dateCell = new PdfPCell(new Phrase("Date: " + startDate));
@@ -108,7 +103,7 @@ public class BankStatement  {
         addrCell.setColspan(2); // Spans both columns to keep it clean
         statementInfo.addCell(addrCell);
 
-        // --- Transaction Table (Fixed borders here) ---
+
         PdfPTable transactionTable = new PdfPTable(4);
         transactionTable.setWidthPercentage(100);
 
@@ -156,5 +151,4 @@ public class BankStatement  {
 
         return transactionList;
     }
-
 }
