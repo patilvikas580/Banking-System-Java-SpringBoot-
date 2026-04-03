@@ -122,7 +122,14 @@ public class BankStatement  {
         document.add(transactionTable);
         document.close();
 
-        // ... Rest of your Email logic
+        EmailDetails emailDetails=EmailDetails.builder()
+                .recipient(user.getEmail())
+                .subject("Statement of Account")
+                .messageBody("Kindly find your requested account statements")
+                .attachment(FILE)
+                .build();
+        emailService.sendEmailAttachment(emailDetails);
+
         return transactionList;
     }
 
