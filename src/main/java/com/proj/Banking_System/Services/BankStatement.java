@@ -57,12 +57,15 @@ public class BankStatement  {
         bankName.setBackgroundColor(BaseColor.GREEN);
         bankName.setPadding(10);
 
-        PdfPCell bankAddress = new PdfPCell(new Phrase("Dhule Maharashtra 0001"));
-        bankAddress.setBorder(0);
-        bankAddress.setPaddingLeft(10);
+//        PdfPCell bankAddress = new PdfPCell(new Phrase("Dhule Maharashtra 0001"));
+//        bankAddress.setBorder(0);
+//        bankAddress.setPaddingLeft(10);
+
+        PdfPCell statementCell = new PdfPCell(new Phrase("Transactions Statement"));
 
         bankInfoTable.addCell(bankName);
-        bankInfoTable.addCell(bankAddress);
+//        bankInfoTable.addCell(bankAddress);
+        bankInfoTable.addCell(statementCell);
 
         // --- Customer Info Section (Fixed the red circled area here) ---
         PdfPTable statementInfo = new PdfPTable(2);
@@ -70,25 +73,36 @@ public class BankStatement  {
         statementInfo.setSpacingBefore(10f);
         statementInfo.setSpacingAfter(10f);
 
+        PdfPCell emptyCell = new PdfPCell(new Phrase("")); // Placeholder for alignment
+
         // Row 1
         PdfPCell dateCell = new PdfPCell(new Phrase("Date: " + startDate));
         dateCell.setBorder(Rectangle.NO_BORDER);
         statementInfo.addCell(dateCell);
 
-        PdfPCell statementCell = new PdfPCell(new Phrase("Statement of Account"));
-        statementCell.setBorder(Rectangle.NO_BORDER);
-        statementInfo.addCell(statementCell);
+        emptyCell.setBorder(Rectangle.NO_BORDER);
+        statementInfo.addCell(emptyCell);
+
 
         // Row 2
-        PdfPCell nameCell = new PdfPCell(new Phrase("Customer Name: " + customerName));
+        PdfPCell nameCell = new PdfPCell(new Phrase("Customer Name : " + customerName));
         nameCell.setBorder(Rectangle.NO_BORDER);
         statementInfo.addCell(nameCell);
 
-        PdfPCell emptyCell = new PdfPCell(new Phrase("")); // Placeholder for alignment
+
         emptyCell.setBorder(Rectangle.NO_BORDER);
         statementInfo.addCell(emptyCell);
 
         // Row 3
+        PdfPCell account = new PdfPCell(new Phrase("Account Number : " + accountNumber));
+        account.setBorder(Rectangle.NO_BORDER);
+        statementInfo.addCell(account);
+
+        PdfPCell emptyCell1 = new PdfPCell(new Phrase("")); // Placeholder for alignment
+        emptyCell1.setBorder(Rectangle.NO_BORDER);
+        statementInfo.addCell(emptyCell1);
+
+        // Row 4
         PdfPCell addrCell = new PdfPCell(new Phrase("Address: " + user.getAddress()));
         addrCell.setBorder(Rectangle.NO_BORDER);
         addrCell.setColspan(2); // Spans both columns to keep it clean
@@ -104,7 +118,7 @@ public class BankStatement  {
             PdfPCell cell = new PdfPCell(new Phrase(header));
             cell.setBackgroundColor(BaseColor.GREEN);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setPadding(5);
+            cell.setPadding(3);
             // cell.setBorder(Rectangle.BOX); // This ensures the border is present
             transactionTable.addCell(cell);
         }
@@ -116,7 +130,17 @@ public class BankStatement  {
             transactionTable.addCell(transaction.getAmount().toString());
             transactionTable.addCell(transaction.getStatus());
         });
+        PdfPCell currentBalanceLabel = new PdfPCell(new Phrase("Total Current Balance: "));
+        currentBalanceLabel.setColspan(3); // This merges the first 3 columns
+        currentBalanceLabel.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        currentBalanceLabel.setPadding(5);
+        currentBalanceLabel.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        transactionTable.addCell(currentBalanceLabel);
 
+        PdfPCell currentBalanceValue = new PdfPCell(new Phrase(user.getAcount_balance().toString()));
+        currentBalanceValue.setHorizontalAlignment(Element.ALIGN_CENTER);
+        currentBalanceValue.setPadding(5);
+        transactionTable.addCell(currentBalanceValue); // This fills the 4th column
         document.add(bankInfoTable);
         document.add(statementInfo);
         document.add(transactionTable);
