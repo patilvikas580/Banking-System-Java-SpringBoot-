@@ -116,7 +116,11 @@ public class UserServiceImpl implements UserService {
                     .transactionType("CREDIT")
                     .amount(request.getAmount())
                     .build();
+            EmailDetails creditAlertAccount=EmailDetails.builder().recipient(userToCredit.getEmail()).subject("Account Credited").messageBody("Rs."+request.getAmount()+" has been Credited in your Account :"+userToCredit.getAccountNumber()+
+                    "\nYour current balance is Rs."+userToCredit.getAcount_balance()).build();
+            emailService.sendEmailAlert(creditAlertAccount);
             transactionService.saveTransaction(transactionDto);
+
             return BankResponse.builder().responseCode(AccountUtils.ACCOUNT_CREDIT_Code).responseMessage(AccountUtils.ACCOUNT_CREDIT_Message).accountInfo(AccountInfo.builder()
                     .accountName(userToCredit.getFirstName()+" "+userToCredit.getOtherName()+" "+userToCredit.getLastName()).accountNumber(userToCredit.getAccountNumber()).accountBalance(userToCredit.getAcount_balance()).build()).build();
         }
@@ -132,9 +136,12 @@ public class UserServiceImpl implements UserService {
                 userToDebit.setAcount_balance(userToDebit.getAcount_balance().subtract(request.getAmount()));
                 userRepository.save(userToDebit);
                 TransactionDto transactionDto=TransactionDto.builder().accountNumber(userToDebit.getAccountNumber())
-                        .transactionType("CREDIT")
+                        .transactionType("DEBIT")
                         .amount(request.getAmount())
                         .build();
+                EmailDetails debitAlertAccount=EmailDetails.builder().recipient(userToDebit.getEmail()).subject("Account Debited").messageBody("Rs."+request.getAmount()+" has been debited from your Account :"+userToDebit.getAccountNumber()+
+                        "\nYour current balance is Rs."+userToDebit.getAcount_balance()).build();
+                emailService.sendEmailAlert(debitAlertAccount);
                 transactionService.saveTransaction(transactionDto);
                 return BankResponse.builder().responseCode(AccountUtils.ACCOUNT_DEBIT_Code).responseMessage(AccountUtils.ACCOUNT_DEBIT_Message).accountInfo(AccountInfo.builder()
                         .accountName(userToDebit.getFirstName()+" "+userToDebit.getOtherName()+" "+userToDebit.getLastName()).accountNumber(userToDebit.getAccountNumber()).accountBalance(userToDebit.getAcount_balance()).build()).build();

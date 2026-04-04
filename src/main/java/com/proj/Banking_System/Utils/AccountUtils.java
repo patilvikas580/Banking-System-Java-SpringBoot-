@@ -12,9 +12,9 @@ public class AccountUtils {
     public static final String ACCOUNT_NOT_EXIST_MESSAGE="User with this account number does not exist";
     public static final String ACCOUNT_FOUND_CODE="004";
     public static final String ACCOUNT_FOUND_MSG="Account has been successfully fetched!";
-    public static final String ACCOUNT_CREDIT_Message="Account has been successfully credited!";
+    public static final String ACCOUNT_CREDIT_Message="Account has been successfully Credited!";
     public static final String ACCOUNT_CREDIT_Code="005";
-    public static final String ACCOUNT_DEBIT_Message="Account has been successfully credited!";
+    public static final String ACCOUNT_DEBIT_Message="Account has been successfully Dedited!";
     public static final String ACCOUNT_DEBIT_Code="006";
 
     public static String generateAccountNumber(){
@@ -24,7 +24,7 @@ public class AccountUtils {
 
         int randNumber= (int) Math.floor(Math.random()*(max-min+1)+min);
 
-        String an=currentYear.toString()+Integer.toString(randNumber);
-        return an;
+        return currentYear.toString()+Integer.toString(randNumber);
+
     }
 }
