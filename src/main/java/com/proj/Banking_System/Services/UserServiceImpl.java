@@ -157,13 +157,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public BankResponse transfer(TransferRequest request) {
-        boolean isDestinationAccount=userRepository.existsByAccountNumber(request.getDestinationAccountNumber());
-        if (!isDestinationAccount){
+        User sourceUser=userRepository.findUserByAccountNumber(request.getSourceAccountNumber());
+        if (sourceUser==null) {
+            return BankResponse.builder().responseCode(AccountUtils.ACCOUNT_NOT_EXIST_CODE).responseMessage("Source Account Not Exist")
+                    .accountInfo(null).build();
+        }
+        User destinationUser=userRepository.findUserByAccountNumber(request.getDestinationAccountNumber());
+        if (destinationUser==null) {
             return BankResponse.builder().responseCode(AccountUtils.ACCOUNT_NOT_EXIST_CODE).responseMessage("Destination Account Not Exist")
                     .accountInfo(null).build();
         }
-        User sourceUser=userRepository.findUserByAccountNumber(request.getSourceAccountNumber());
-        User destinationUser=userRepository.findUserByAccountNumber(request.getDestinationAccountNumber());
+        if (destinationUser==sourceUser) {
+            return BankResponse.builder().responseCode("555").responseMessage("Enter different Account numbers as both Account numbers which you entered are identical")
+                    .accountInfo(null).build();
+        }
+
+
         if (!(request.getAmount().compareTo(sourceUser.getAcount_balance())>0)){
           sourceUser.setAcount_balance(sourceUser.getAcount_balance().subtract(request.getAmount()));
           userRepository.save(sourceUser);
