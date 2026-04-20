@@ -6,14 +6,24 @@ A full-featured **RESTful Banking System** built with **Java 17** and **Spring B
 
 ## 📸 Screenshots
 
-> _Add your screenshots here_
+**Create Account** — Register a new bank account with user details
+![Create](https://github.com/user-attachments/assets/a0a7a390-2743-43d0-89d2-2787001e5666)
 
-| Feature | Screenshot |
-|---|---|
-| Login / Auth | ![Auth]() |
-| Account Dashboard | ![Dashboard]() |
-| Transaction History | ![Transactions]() |
-| PDF Statement | ![PDF]() |
+**Login** — Authenticate with credentials to receive a JWT token
+![Login Cred](https://github.com/user-attachments/assets/c9f9c3f0-6087-4b13-84b9-01f7ddbe9355)
+**Name Enquiry** — Look up the account holder's name by account number
+![Name Enquiry](https://github.com/user-attachments/assets/d2bfe1fa-fe02-4ab3-92af-0a3037d94495)
+**Balance Enquiry** — Check the current available balance of an account
+![Balance Enquiry](https://github.com/user-attachments/assets/1a42894a-8bc7-4cbf-b823-4bc1c51be9f7)
+**Credit Account** — Deposit funds into a specified bank account
+![Credit account](https://github.com/user-attachments/assets/b4178407-579a-417f-ae62-bddfb82f3c43)
+**Transfer Money** — Transfer funds securely between two accounts
+![Transfer Money](https://github.com/user-attachments/assets/4b920aa5-9e8d-4273-92ce-cb89f7502415)
+**Statement Email Attachment** — Bank statement automatically sent as an email attachment
+![Statetement Attachment](https://github.com/user-attachments/assets/977d4856-4b95-40d6-a324-d3de10d1a818)
+**PDF Bank Statement** — Downloadable PDF showing full transaction history
+![Statements PDF](https://github.com/user-attachments/assets/3224f835-207d-4979-9d3a-64b1d3c958c4)
+
 
 ---
 
