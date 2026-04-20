@@ -171,8 +171,6 @@ public class UserServiceImpl implements UserService {
             return BankResponse.builder().responseCode("555").responseMessage("Enter different Account numbers as both Account numbers which you entered are identical")
                     .accountInfo(null).build();
         }
-
-
         if (!(request.getAmount().compareTo(sourceUser.getAcount_balance())>0)){
           sourceUser.setAcount_balance(sourceUser.getAcount_balance().subtract(request.getAmount()));
           userRepository.save(sourceUser);
@@ -201,7 +199,4 @@ public class UserServiceImpl implements UserService {
                         .accountName(sourceUser.getFirstName()+" "+sourceUser.getOtherName()+" "+sourceUser.getLastName()).accountNumber(sourceUser.getAccountNumber()).accountBalance(sourceUser.getAcount_balance()).build()).build();
 
     }
-
-
-
 }
