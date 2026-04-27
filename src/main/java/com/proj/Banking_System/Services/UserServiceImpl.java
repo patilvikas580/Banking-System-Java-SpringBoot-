@@ -20,20 +20,14 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
-
     @Autowired
     EmailService emailService;
-
-
     @Autowired
     TransactionService transactionService;
-
     @Autowired
     PasswordEncoder passwordEncoder;
-
     @Autowired
     AuthenticationManager authenticationManager;
-
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
